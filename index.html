@@ -584,15 +584,11 @@ button {
                 <div class="progress">Intro <span id="game-current">1</span> of <span id="game-total">20</span></div>
                 <div class="intro-display game-display">
                     <div class="intro-number" id="game-number">#1</div>
-                    <div class="game-hint">Play this intro!</div>
-                </div>
-                <div id="game-answer" class="game-answer hidden">
                     <div class="intro-artist" id="game-artist">Artist</div>
                     <div class="intro-song" id="game-song">Song</div>
                 </div>
                 <div class="controls">
-                    <button id="game-reveal" class="btn-primary">Reveal Answer</button>
-                    <button id="game-next" class="btn-primary hidden">Next →</button>
+                    <button id="game-next" class="btn-primary">Next →</button>
                 </div>
             </div>
 
@@ -659,10 +655,8 @@ const gameResults = document.getElementById('game-results');
 const gameCurrent = document.getElementById('game-current');
 const gameTotal = document.getElementById('game-total');
 const gameNumber = document.getElementById('game-number');
-const gameAnswer = document.getElementById('game-answer');
 const gameArtist = document.getElementById('game-artist');
 const gameSong = document.getElementById('game-song');
-const gameReveal = document.getElementById('game-reveal');
 const gameNext = document.getElementById('game-next');
 const gameAnswersList = document.getElementById('game-answers-list');
 const gameRestart = document.getElementById('game-restart');
@@ -828,20 +822,8 @@ function showGameIntro() {
     gameCurrent.textContent = gameIndex + 1;
     gameTotal.textContent = gameOrder.length;
     gameNumber.textContent = `#${gameIndex + 1}`;
-    
-    gameAnswer.classList.add('hidden');
-    gameReveal.classList.remove('hidden');
-    gameNext.classList.add('hidden');
-}
-
-function revealGameAnswer() {
-    const intro = intros[gameOrder[gameIndex]];
-    
     gameArtist.textContent = intro.artist;
     gameSong.textContent = intro.song;
-    gameAnswer.classList.remove('hidden');
-    gameReveal.classList.add('hidden');
-    gameNext.classList.remove('hidden');
     
     if (gameIndex === gameOrder.length - 1) {
         gameNext.textContent = 'See Results →';
@@ -1008,7 +990,6 @@ function setupEventListeners() {
         });
     });
     
-    gameReveal.addEventListener('click', revealGameAnswer);
     gameNext.addEventListener('click', nextGame);
     gameRestart.addEventListener('click', () => {
         gameResults.classList.add('hidden');
