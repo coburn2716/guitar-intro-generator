@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎸 Guitar Intro Generator</title>
+    <style>
+/* ===== CSS VARIABLES ===== */
+:root {
+    --bg: #0f0f0f;
+    --bg-card: #1a1a1a;
+    --bg-hover: #252525;
+    --border: #333;
+    --text: #f0f0f0;
+    --text-muted: #888;
+    --accent: #58b787;
+    --accent-hover: #4a9e73;
+    --danger: #e74c3c;
+    --danger-hover: #c0392b;
+    --radius: 12px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+.app {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ===== HEADER ===== */
+header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+}
+
+/* ===== TABS ===== */
+.tabs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.tab-btn {
+    padding: 10px 24px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-muted);
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.tab-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text);
+}
+
+.tab-btn.active {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    font-weight: 600;
+}
+
+/* ===== TAB CONTENT ===== */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ===== CARDS ===== */
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+}
+
+.card h2 {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.center {
+    text-align: center;
+}
+
+/* ===== FORMS ===== */
+.form-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.form-row input {
+    flex: 1;
+    min-width: 120px;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.form-row input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+/* ===== BUTTONS ===== */
+button {
+    cursor: pointer;
+    border: none;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    padding: 12px 24px;
+    background: var(--accent);
+    color: #000;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+}
+
+.btn-secondary {
+    padding: 10px 18px;
+    background: var(--bg-hover);
+    color: var(--text);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background: var(--border);
+}
+
+.btn-danger {
+    padding: 10px 18px;
+    background: transparent;
+    color: var(--danger);
+    border-radius: 8px;
+    border: 1px solid var(--danger);
+}
+
+.btn-danger:hover {
+    background: var(--danger);
+    color: #fff;
+}
+
+.full-width {
+    width: 100%;
+    margin-top: 12px;
+}
+
+/* ===== SECTION HEADER ===== */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.section-header .actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    background: var(--accent);
+    color: #000;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* ===== INTRO LIST ===== */
+.intro-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.intro-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: background 0.2s;
+}
+
+.intro-item:hover {
+    background: var(--bg-hover);
+}
+
+.intro-info {
+    flex: 1;
+}
+
+.intro-artist-name {
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.intro-song-name {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.intro-number-badge {
+    background: var(--border);
+    color: var(--text-muted);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    margin-right: 12px;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: var(--danger);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.delete-btn:hover {
+    opacity: 1;
+}
+
+.empty-state {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 40px 20px;
+}
+
+/* ===== PRACTICE / GAME DISPLAY ===== */
+.progress {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.intro-display {
+    padding: 40px 20px;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+}
+
+.intro-number {
+    font-size: 4rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 16px;
+}
+
+.intro-artist {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.intro-song {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+}
+
+.game-display {
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-hint {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-top: 12px;
+}
+
+.game-answer {
+    padding: 20px;
+    background: var(--bg-hover);
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+    border: 1px solid var(--accent);
+}
+
+/* ===== CONTROLS ===== */
+.controls {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+/* ===== GAME SETUP ===== */
+.game-options {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.game-size-btn {
+    padding: 16px 32px;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    color: var(--text);
+    border-radius: var(--radius);
+    font-size: 1.3rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.game-size-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.hint {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* ===== RESULTS ===== */
+.answers-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin: 16px 0;
+}
+
+.answer-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.answer-num {
+    background: var(--accent);
+    color: #000;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-weight: 700;
+    margin-right: 16px;
+    min-width: 50px;
+    text-align: center;
+}
+
+.answer-info {
+    flex: 1;
+}
+
+.answer-artist {
+    font-weight: 600;
+}
+
+.answer-song {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* ===== UTILITIES ===== */
+.hidden {
+    display: none !important;
+}
+
+.file-label {
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* ===== TOAST ===== */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--accent);
+    color: #000;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    z-index: 1000;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 480px) {
+    .app {
+        padding: 12px;
+    }
+    
+    header h1 {
+        font-size: 1.2rem;
+    }
+    
+    .tab-btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .form-row {
+        flex-direction: column;
+    }
+    
+    .form-row input {
+        width: 100%;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .intro-number {
+        font-size: 3rem;
+    }
+    
+    .game-size-btn {
+        padding: 12px 24px;
+        font-size: 1.1rem;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header>
+            <h1>🎸 Guitar Intro Generator</h1>
+            <nav class="tabs">
+                <button class="tab-btn active" data-tab="library">Library</button>
+                <button class="tab-btn" data-tab="practice">Practice</button>
+                <button class="tab-btn" data-tab="game">Game</button>
+            </nav>
+        </header>
+
+        <!-- LIBRARY TAB -->
+        <section id="library" class="tab-content active">
+            <div class="card">
+                <h2>Add New Intro</h2>
+                <form id="add-form">
+                    <div class="form-row">
+                        <input type="text" id="artist" placeholder="Artist" required>
+                        <input type="text" id="song" placeholder="Song" required>
+                        <button type="submit" class="btn-primary">Add</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="section-header">
+                    <h2>Your Intros <span id="intro-count" class="badge">0</span></h2>
+                    <div class="actions">
+                        <button id="shuffle-library" class="btn-secondary">🔀 Shuffle View</button>
+                        <button id="export-data" class="btn-secondary">📥 Export</button>
+                        <label class="btn-secondary file-label">
+                            📤 Import
+                            <input type="file" id="import-data" accept=".json" hidden>
+                        </label>
+                        <button id="clear-all" class="btn-danger">🗑️ Clear All</button>
+                    </div>
+                </div>
+                <div id="intro-list" class="intro-list">
+                    <p class="empty-state">No intros yet. Add some above!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRACTICE TAB -->
+        <section id="practice" class="tab-content">
+            <div class="card center">
+                <div id="practice-empty" class="empty-state">
+                    <p>Add intros in the Library first!</p>
+                </div>
+                <div id="practice-active" class="hidden">
+                    <div class="progress">Intro <span id="practice-current">1</span> of <span id="practice-total">0</span></div>
+                    <div class="intro-display">
+                        <div class="intro-number" id="practice-number">#1</div>
+                        <div class="intro-artist" id="practice-artist">Artist</div>
+                        <div class="intro-song" id="practice-song">Song</div>
+                    </div>
+                    <div class="controls">
+                        <button id="practice-prev" class="btn-secondary">← Previous</button>
+                        <button id="practice-next" class="btn-primary">Next →</button>
+                    </div>
+                    <button id="practice-shuffle" class="btn-secondary full-width">🔀 Shuffle Again</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- GAME TAB -->
+        <section id="game" class="tab-content">
+            <div id="game-setup" class="card">
+                <h2>Game Setup</h2>
+                <p>How many intros do you want to play?</p>
+                <div class="game-options">
+                    <button class="game-size-btn" data-size="10">10</button>
+                    <button class="game-size-btn" data-size="20">20</button>
+                    <button class="game-size-btn" data-size="30">30</button>
+                    <button class="game-size-btn" data-size="all">All</button>
+                </div>
+                <p class="hint">You'll see the intro number, play it, then reveal the answer.</p>
+            </div>
+
+            <div id="game-play" class="card center hidden">
+                <div class="progress">Intro <span id="game-current">1</span> of <span id="game-total">20</span></div>
+                <div class="intro-display game-display">
+                    <div class="intro-number" id="game-number">#1</div>
+                    <div class="game-hint">Play this intro!</div>
+                </div>
+                <div id="game-answer" class="game-answer hidden">
+                    <div class="intro-artist" id="game-artist">Artist</div>
+                    <div class="intro-song" id="game-song">Song</div>
+                </div>
+                <div class="controls">
+                    <button id="game-reveal" class="btn-primary">Reveal Answer</button>
+                    <button id="game-next" class="btn-primary hidden">Next →</button>
+                </div>
+            </div>
+
+            <div id="game-results" class="card hidden">
+                <h2>🎉 Game Complete!</h2>
+                <p>Here are all the answers:</p>
+                <div id="game-answers-list" class="answers-list"></div>
+                <button id="game-restart" class="btn-primary full-width">Play Again</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+// ===== STATE =====
+let intros = [];
+let practiceOrder = [];
+let practiceIndex = 0;
+let gameOrder = [];
+let gameIndex = 0;
+let storageAvailable = false;
+
+// Check if localStorage works
+function checkStorage() {
+    try {
+        const test = '__storage_test__';
+        localStorage.setItem(test, test);
+        localStorage.removeItem(test);
+        storageAvailable = true;
+    } catch (e) {
+        storageAvailable = false;
+        console.log('localStorage not available, using memory storage');
+    }
+}
+
+// ===== DOM ELEMENTS =====
+const tabs = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content');
+const addForm = document.getElementById('add-form');
+const artistInput = document.getElementById('artist');
+const songInput = document.getElementById('song');
+const introList = document.getElementById('intro-list');
+const introCount = document.getElementById('intro-count');
+const shuffleLibraryBtn = document.getElementById('shuffle-library');
+const exportBtn = document.getElementById('export-data');
+const importInput = document.getElementById('import-data');
+const clearAllBtn = document.getElementById('clear-all');
+
+// Practice elements
+const practiceEmpty = document.getElementById('practice-empty');
+const practiceActive = document.getElementById('practice-active');
+const practiceCurrent = document.getElementById('practice-current');
+const practiceTotal = document.getElementById('practice-total');
+const practiceNumber = document.getElementById('practice-number');
+const practiceArtist = document.getElementById('practice-artist');
+const practiceSong = document.getElementById('practice-song');
+const practicePrev = document.getElementById('practice-prev');
+const practiceNext = document.getElementById('practice-next');
+const practiceShuffle = document.getElementById('practice-shuffle');
+
+// Game elements
+const gameSetup = document.getElementById('game-setup');
+const gamePlay = document.getElementById('game-play');
+const gameResults = document.getElementById('game-results');
+const gameCurrent = document.getElementById('game-current');
+const gameTotal = document.getElementById('game-total');
+const gameNumber = document.getElementById('game-number');
+const gameAnswer = document.getElementById('game-answer');
+const gameArtist = document.getElementById('game-artist');
+const gameSong = document.getElementById('game-song');
+const gameReveal = document.getElementById('game-reveal');
+const gameNext = document.getElementById('game-next');
+const gameAnswersList = document.getElementById('game-answers-list');
+const gameRestart = document.getElementById('game-restart');
+const gameSizeBtns = document.querySelectorAll('.game-size-btn');
+
+// ===== INIT =====
+function init() {
+    checkStorage();
+    loadFromStorage();
+    renderLibrary();
+    setupEventListeners();
+    
+    // Show storage warning if needed
+    if (!storageAvailable) {
+        showToast('⚠️ Data will not persist between sessions');
+    }
+}
+
+// ===== STORAGE =====
+function loadFromStorage() {
+    if (!storageAvailable) {
+        intros = [];
+        return;
+    }
+    const stored = localStorage.getItem('guitarIntros');
+    if (stored) {
+        try {
+            intros = JSON.parse(stored);
+        } catch (e) {
+            intros = [];
+        }
+    }
+}
+
+function saveToStorage() {
+    if (!storageAvailable) return;
+    try {
+        localStorage.setItem('guitarIntros', JSON.stringify(intros));
+    } catch (e) {
+        console.log('Failed to save to localStorage');
+    }
+}
+
+// ===== TABS =====
+function switchTab(tabName) {
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
+    tabContents.forEach(c => c.classList.toggle('active', c.id === tabName));
+}
+
+// ===== LIBRARY =====
+function renderLibrary() {
+    introCount.textContent = intros.length;
+    
+    if (intros.length === 0) {
+        introList.innerHTML = '<p class="empty-state">No intros yet. Add some above!</p>';
+        return;
+    }
+    
+    introList.innerHTML = intros.map((intro, index) => `
+        <div class="intro-item">
+            <span class="intro-number-badge">#${index + 1}</span>
+            <div class="intro-info">
+                <div class="intro-artist-name">${escapeHtml(intro.artist)}</div>
+                <div class="intro-song-name">${escapeHtml(intro.song)}</div>
+            </div>
+            <button class="delete-btn" data-index="${index}" title="Delete">×</button>
+        </div>
+    `).join('');
+    
+    // Attach delete handlers
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const idx = parseInt(e.target.dataset.index);
+            intros.splice(idx, 1);
+            saveToStorage();
+            renderLibrary();
+        });
+    });
+}
+
+function addIntro(artist, song) {
+    intros.push({ artist: artist.trim(), song: song.trim() });
+    saveToStorage();
+    renderLibrary();
+    showToast(`✅ Added: ${artist} — ${song}`);
+}
+
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
+// ===== PRACTICE =====
+function startPractice() {
+    if (intros.length === 0) {
+        practiceEmpty.classList.remove('hidden');
+        practiceActive.classList.add('hidden');
+        return;
+    }
+    
+    practiceOrder = shuffleArray(intros.map((_, i) => i));
+    practiceIndex = 0;
+    showPracticeIntro();
+    
+    practiceEmpty.classList.add('hidden');
+    practiceActive.classList.remove('hidden');
+}
+
+function showPracticeIntro() {
+    const introIndex = practiceOrder[practiceIndex];
+    const intro = intros[introIndex];
+    
+    practiceCurrent.textContent = practiceIndex + 1;
+    practiceTotal.textContent = practiceOrder.length;
+    practiceNumber.textContent = `#${practiceIndex + 1}`;
+    practiceArtist.textContent = intro.artist;
+    practiceSong.textContent = intro.song;
+    
+    practicePrev.disabled = practiceIndex === 0;
+    practiceNext.textContent = practiceIndex === practiceOrder.length - 1 ? 'Done ✓' : 'Next →';
+}
+
+function nextPractice() {
+    if (practiceIndex < practiceOrder.length - 1) {
+        practiceIndex++;
+        showPracticeIntro();
+    } else {
+        // Done - offer to shuffle again
+        practiceIndex = 0;
+        showPracticeIntro();
+    }
+}
+
+function prevPractice() {
+    if (practiceIndex > 0) {
+        practiceIndex--;
+        showPracticeIntro();
+    }
+}
+
+// ===== GAME =====
+function startGame(size) {
+    if (intros.length === 0) return;
+    
+    const count = size === 'all' ? intros.length : Math.min(size, intros.length);
+    gameOrder = shuffleArray(intros.map((_, i) => i)).slice(0, count);
+    gameIndex = 0;
+    
+    gameSetup.classList.add('hidden');
+    gameResults.classList.add('hidden');
+    gamePlay.classList.remove('hidden');
+    
+    showGameIntro();
+}
+
+function showGameIntro() {
+    const intro = intros[gameOrder[gameIndex]];
+    
+    gameCurrent.textContent = gameIndex + 1;
+    gameTotal.textContent = gameOrder.length;
+    gameNumber.textContent = `#${gameIndex + 1}`;
+    
+    gameAnswer.classList.add('hidden');
+    gameReveal.classList.remove('hidden');
+    gameNext.classList.add('hidden');
+}
+
+function revealGameAnswer() {
+    const intro = intros[gameOrder[gameIndex]];
+    
+    gameArtist.textContent = intro.artist;
+    gameSong.textContent = intro.song;
+    gameAnswer.classList.remove('hidden');
+    gameReveal.classList.add('hidden');
+    gameNext.classList.remove('hidden');
+    
+    if (gameIndex === gameOrder.length - 1) {
+        gameNext.textContent = 'See Results →';
+    } else {
+        gameNext.textContent = 'Next →';
+    }
+}
+
+function nextGame() {
+    if (gameIndex < gameOrder.length - 1) {
+        gameIndex++;
+        showGameIntro();
+    } else {
+        showGameResults();
+    }
+}
+
+function showGameResults() {
+    gamePlay.classList.add('hidden');
+    gameResults.classList.remove('hidden');
+    
+    gameAnswersList.innerHTML = gameOrder.map((introIdx, i) => {
+        const intro = intros[introIdx];
+        return `
+            <div class="answer-item">
+                <span class="answer-num">#${i + 1}</span>
+                <div class="answer-info">
+                    <div class="answer-artist">${escapeHtml(intro.artist)}</div>
+                    <div class="answer-song">${escapeHtml(intro.song)}</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// ===== EXPORT / IMPORT =====
+function exportData() {
+    const data = JSON.stringify(intros, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `guitar-intros-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function importData(file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (Array.isArray(data)) {
+                intros = data;
+                saveToStorage();
+                renderLibrary();
+                alert(`Imported ${data.length} intros!`);
+            } else {
+                alert('Invalid file format');
+            }
+        } catch (err) {
+            alert('Error reading file');
+        }
+    };
+    reader.readAsText(file);
+}
+
+// ===== UTILS =====
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function showToast(message) {
+    // Remove existing toast
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    // Trigger animation
+    requestAnimationFrame(() => {
+        toast.classList.add('show');
+    });
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 2000);
+}
+
+// ===== EVENT LISTENERS =====
+function setupEventListeners() {
+    // Tabs
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            switchTab(tab.dataset.tab);
+            if (tab.dataset.tab === 'practice') startPractice();
+        });
+    });
+    
+    // Add form
+    addForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const artist = artistInput.value.trim();
+        const song = songInput.value.trim();
+        
+        if (artist && song) {
+            addIntro(artist, song);
+            artistInput.value = '';
+            songInput.value = '';
+            artistInput.focus();
+        } else {
+            showToast('⚠️ Please fill in both fields');
+        }
+        
+        return false;
+    });
+    
+    // Also handle click on Add button explicitly for mobile
+    document.querySelector('#add-form .btn-primary').addEventListener('click', (e) => {
+        e.preventDefault();
+        addForm.dispatchEvent(new Event('submit'));
+    });
+    
+    // Shuffle library view
+    shuffleLibraryBtn.addEventListener('click', () => {
+        intros = shuffleArray(intros);
+        saveToStorage();
+        renderLibrary();
+    });
+    
+    // Export / Import
+    exportBtn.addEventListener('click', exportData);
+    importInput.addEventListener('change', (e) => {
+        if (e.target.files[0]) importData(e.target.files[0]);
+    });
+    
+    // Clear all
+    clearAllBtn.addEventListener('click', () => {
+        if (confirm('Delete all intros? This cannot be undone.')) {
+            intros = [];
+            saveToStorage();
+            renderLibrary();
+        }
+    });
+    
+    // Practice controls
+    practicePrev.addEventListener('click', prevPractice);
+    practiceNext.addEventListener('click', nextPractice);
+    practiceShuffle.addEventListener('click', startPractice);
+    
+    // Game controls
+    gameSizeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const size = btn.dataset.size === 'all' ? 'all' : parseInt(btn.dataset.size);
+            startGame(size);
+        });
+    });
+    
+    gameReveal.addEventListener('click', revealGameAnswer);
+    gameNext.addEventListener('click', nextGame);
+    gameRestart.addEventListener('click', () => {
+        gameResults.classList.add('hidden');
+        gameSetup.classList.remove('hidden');
+    });
+}
+
+// ===== START =====
+init();
+    </script>
+</body>
+</html>
